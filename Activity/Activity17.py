@@ -7,6 +7,7 @@
 #   code block  
 
 #creation of function
+
 def greet_Someone():
     print("Hi , hoped your having a delightful Tuesday afternoon.")
 
