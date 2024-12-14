@@ -1,5 +1,6 @@
 #Help Fuction
 # #This function is for calculating factorial
+
 def factorial(number):
     """THIS FUNCTION IS FOR CALCULATING FACTORIAL, JUST PUT THE NUMBER INSIDE THE PARENTHESIS"""
     fact = 1
