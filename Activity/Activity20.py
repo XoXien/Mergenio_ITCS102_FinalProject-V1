@@ -2,6 +2,13 @@
 # Lists are one of 4 built-in data types in Python used to store collections of data
 # The other 3 are Tuple, Set, and Dictionary, all with different qualities and usage.
 
+fruits=["cherry","banana","apple",]
+print(fruits)
+# To access list 
+# Lists are used to store multiple items in a single variable.
+# Lists are one of 4 built-in data types in Python used to store collections of data
+# The other 3 are Tuple, Set, and Dictionary, all with different qualities and usage.
+
 fruits=["apple","grapes","banana","pineapple","watermelon"]
 print(fruits)
 print()
