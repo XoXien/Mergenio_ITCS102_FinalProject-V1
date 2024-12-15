@@ -1,4 +1,4 @@
-# Mini Bank Simulator
+# Mini Bank Simulator 
 has_account = False
 running = True
 import os
