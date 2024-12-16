@@ -1,5 +1,50 @@
 import os
+from shutil import get_terminal_size
+from threading import Thread
+from time import sleep
 
+#Loading 
+class Loader:
+    def __init__(self, desc="Loading...", timeout=0.01, total=100, bar_length=50):
+        self.desc = desc
+        self.timeout = timeout
+        self.total = total
+        self.bar_length = bar_length
+        self._thread = Thread(target=self._animate, daemon=True)
+        self.done = False
+        self.active = False
+
+    def trigger(self):
+        if not self.active:
+            self.active = True
+            self._thread.start()
+
+    def _animate(self):
+        for i in range(1, self.total + 1):
+            percentage = int((i / self.total) * 100)
+            bar = "■" * int((i / self.total) * self.bar_length)
+            spaces = " " * (self.bar_length - len(bar))
+            print(f"\r{self.desc} [{bar}{spaces}] {percentage}%", end="", flush=True)
+            sleep(self.timeout)
+
+    def stop(self):
+        self.done = True
+        cols = get_terminal_size((80, 20)).columns
+        print("\r" + " " * cols, end="", flush=True)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        self.stop()
+
+# Loading Trigger
+def main():
+    with Loader("Loading progress:") as loader:
+        sleep(1)
+        loader.trigger()
+        for i in range(10):
+            sleep(0.25)
 
 # Printing Functions
 def simple_printing():
@@ -681,8 +726,7 @@ def right_pyramid_whileloop():
 
     print("---------------------------------")
     clear= input("Enter any character:")
-    
-    
+        
 # Main Menu
 def main_menu():
     while True:
@@ -699,28 +743,45 @@ def main_menu():
         print("-----------------------------------------------------")
         print("")
         choice = input("Select an option: ")
-        os.system('cls')
-        
 
         if choice == '1':
+            main()
+            os.system('cls')
             printing_menu()
         elif choice == '2':
+            main()
+            os.system('cls')
             variables_menu()
         elif choice == '3':
+            main()
+            os.system('cls')
             conditional_statements_menu()
         elif choice == '4':
+            main()
+            os.system('cls')
             looping_statements_menu()
         elif choice == '5':
+            main()
+            os.system('cls')
             functions_menu()
         elif choice == '6':
+            main()
+            os.system('cls')
             list_menu()
         elif choice == '7':
+            main()
+            os.system('cls')
             others_menu()
         elif choice == '0':
+            os.system('cls')
+            main()
+            print("-----------------------------------------------------")
             print("Thank You for using the system hope you learned something!")
+            print("-----------------------------------------------------")
             break
         else:
             print("Invalid choice, try again.")
+
 # Submenus
 def printing_menu():
     while True:
@@ -979,6 +1040,7 @@ def create_account():
     usernames.append(username)
     passwords.append(password)
     print("--------------------------------------------------")
+    main()
     print(f"Account created successfully for {username}!")
     print("--------------------------------------------------")
 
@@ -994,10 +1056,13 @@ def login(usernames, passwords):
     if username in usernames:
         index = usernames.index(username) 
         if passwords[index] == password:
-            os.system('cls')
+            main()
             print(f"Login Successfully, Welcome {username}!")
+            clear= input("Enter any character:")
+            os.system('cls')
             main_menu()
-    print("Invalid username or password.")
+        else:
+            print("Invalid username or password.")
 
 usernames = []
 passwords = []
@@ -1017,6 +1082,7 @@ os.system('cls')
 if login_choice.lower() == 'yes':
     login(usernames, passwords)
 else:
+    main()
     print("--------------------------------------------------")
     print("Thank you for using my system!")
     print("--------------------------------------------------")
