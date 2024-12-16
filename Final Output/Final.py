@@ -1,51 +1,77 @@
 import os
+import sys
+import time
+from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
 
-#Loading 
+# Loading Animation
+# Credits:https://stackoverflow.com/questions/22029562/python-how-to-make-simple-animated-loading-while-process-is-running with some modification  
 class Loader:
-    def __init__(self, desc="Loading...", timeout=0.01, total=100, bar_length=50):
+    def __init__(self, desc="Loading...", timeout=0.1):
         self.desc = desc
         self.timeout = timeout
-        self.total = total
-        self.bar_length = bar_length
         self._thread = Thread(target=self._animate, daemon=True)
+        self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
         self.done = False
-        self.active = False
-
-    def trigger(self):
-        if not self.active:
-            self.active = True
-            self._thread.start()
 
     def _animate(self):
-        for i in range(1, self.total + 1):
-            percentage = int((i / self.total) * 100)
-            bar = "■" * int((i / self.total) * self.bar_length)
-            spaces = " " * (self.bar_length - len(bar))
-            print(f"\r{self.desc} [{bar}{spaces}] {percentage}%", end="", flush=True)
+        for c in cycle(self.steps):
+            if self.done:
+                break
+            print(f"\r{self.desc} {c}", flush=True, end="")
             sleep(self.timeout)
+
+    def start(self):
+        self._thread.start()
 
     def stop(self):
         self.done = True
-        cols = get_terminal_size((80, 20)).columns
-        print("\r" + " " * cols, end="", flush=True)
+        print("\r" + " " * get_terminal_size().columns, end="", flush=True)
 
     def __enter__(self):
-        return self
+        self.start()
 
     def __exit__(self, exc_type, exc_value, tb):
         self.stop()
-
 # Loading Trigger
-def main():
-    with Loader("Loading progress:") as loader:
-        sleep(1)
-        loader.trigger()
-        for i in range(10):
+def animation():
+    with Loader("Loading Please Wait! ..."):
+        for _ in range(10):
             sleep(0.25)
+    with Loader("Initializing all line of codes..."):
+        for _ in range(10):
+            sleep(0.25)
+    os.system('cls')
 
+def animation_2():
+    with Loader("Loading Please Wait! ..."):
+        for _ in range(10):
+            sleep(0.25)
+    os.system('cls')
+
+# Progressbar Loading
+# Credits: https://stackoverflow.com/questions/3160699/python-progress-bar with some modification  
+def progressbar(it, prefix="", size=60, out=sys.stdout):
+    count = len(it)
+    start = time.time()
+    def show(j):
+        x = int(size * j / count)
+        elapsed = time.time() - start
+        print(f"{prefix}[{'■' * x}{'.' * (size - x)}] {j}/{count} ", end='\r', file=out, flush=True)
+    show(0.1)
+    for i, item in enumerate(it):
+        yield item
+        show(i + 1)
+    print("\n", flush=True, file=out)
+
+# Progressbar Trigger
+def main():
+    for item in progressbar(range(100), prefix="Progress:", size=40):
+        time.sleep(0.02)
+    os.system('cls')
+    
 # Printing Functions
 def simple_printing():
     print("---------------------------------------\n")
@@ -745,31 +771,31 @@ def main_menu():
         choice = input("Select an option: ")
 
         if choice == '1':
-            main()
+            animation_2()
             os.system('cls')
             printing_menu()
         elif choice == '2':
-            main()
+            animation_2()
             os.system('cls')
             variables_menu()
         elif choice == '3':
-            main()
+            animation_2()
             os.system('cls')
             conditional_statements_menu()
         elif choice == '4':
-            main()
+            animation_2()
             os.system('cls')
             looping_statements_menu()
         elif choice == '5':
-            main()
+            animation_2()
             os.system('cls')
             functions_menu()
         elif choice == '6':
-            main()
+            animation_2()
             os.system('cls')
             list_menu()
         elif choice == '7':
-            main()
+            animation_2()
             os.system('cls')
             others_menu()
         elif choice == '0':
@@ -804,6 +830,7 @@ def printing_menu():
             string_formatting()
             os.system('cls')
         elif choice == '0':
+            animation_2()
             os.system('cls')
             break
         else:
@@ -831,7 +858,7 @@ def variables_menu():
             tuple_example()
             os.system('cls')
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -866,7 +893,7 @@ def conditional_statements_menu():
             nested_conditionals()
             os.system('cls')
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -893,7 +920,7 @@ def looping_statements_menu():
             while_loop()
             os.system('cls')
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -916,7 +943,7 @@ def functions_menu():
             function_example()
             os.system('cls')
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -942,7 +969,7 @@ def list_menu():
         elif choice == '2':
             editing_list()
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -974,7 +1001,7 @@ def shape_menu():
             right_pyramid_whileloop()
             os.system('cls')
         elif choice == "0":
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice. Please try again.")
@@ -1019,7 +1046,7 @@ def others_menu():
             shape_menu()
             os.system('cls')        
         elif choice == '0':
-            os.system('cls')
+            animation_2()
             break
         else:
             print("Invalid choice, try again.")
@@ -1036,13 +1063,13 @@ def create_account():
         print("Username already exists. Please try a different username.")
         return usernames, passwords 
     password = input("Enter your desired password: ")
+    print("--------------------------------------------------")
     
     usernames.append(username)
     passwords.append(password)
-    print("--------------------------------------------------")
     main()
-    print(f"Account created successfully for {username}!")
     print("--------------------------------------------------")
+    print(f"Account created successfully for {username}!")
 
     return usernames, passwords
 
@@ -1057,7 +1084,9 @@ def login(usernames, passwords):
         index = usernames.index(username) 
         if passwords[index] == password:
             main()
+            print("--------------------------------------------------")
             print(f"Login Successfully, Welcome {username}!")
+            print("--------------------------------------------------")
             clear= input("Enter any character:")
             os.system('cls')
             main_menu()
@@ -1066,9 +1095,14 @@ def login(usernames, passwords):
 
 usernames = []
 passwords = []
+main()
+print(f"Starting Program Please Wait ")
+animation()
 print("--------------------------------------------------")
 print("  Welcome To Mergenio ITCS102 Compilation ")
+print("--------------------------------------------------")
 create_account_choice = input("Do you want to create a new account? (yes/no): ")
+print("--------------------------------------------------")
 os.system('cls')
 
 if create_account_choice.lower() == 'yes':
