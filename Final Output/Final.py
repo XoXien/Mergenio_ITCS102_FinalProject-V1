@@ -1010,7 +1010,7 @@ def others_menu():
     while True:
         print("-----------------------------------------------------")
         print("\t\t--- Others Menu ---")
-        print("This menu is all about my favorite Activities and Code. \nThis Menu include the other topic that I learned in ")
+        print("This menu is all about my favorite Activities and Code. \nThis Menu include the other topic that I learned in ITCS102")
         print("--------------------------------------")
         print(" 1. Math - Arithmetic Operators")
         print(" 2. Temperature")
